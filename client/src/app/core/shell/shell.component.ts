@@ -69,7 +69,7 @@ export class ShellComponent {
     this.logout = new EventEmitter();
   }
 
-  logoutEfetuado() {
+  logoutAcionado() {
     this.logout.emit();
   }
 }

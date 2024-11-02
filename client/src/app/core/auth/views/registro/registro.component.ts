@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { AuthService } from '../../services/auth.service';
 import { RegistrarUsuarioViewModel } from '../../models/auth.models';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
@@ -15,6 +15,7 @@ import { UsuarioService } from '../../services/usuario.service';
   standalone: true,
   imports: [
     NgIf,
+    RouterLink,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
