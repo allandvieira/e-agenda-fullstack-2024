@@ -29,7 +29,6 @@ import { MatMenuModule } from '@angular/material/menu';
     MatMenuModule,
     MatIconModule,
   ],
-
   templateUrl: './shell.component.html',
   styleUrl: './shell.component.scss',
 })
@@ -55,6 +54,11 @@ export class ShellComponent {
       titulo: 'Dashboard',
       icone: 'home',
       rota: '/dashboard',
+    },
+    {
+      titulo: 'Contatos',
+      icone: 'people',
+      rota: '/contatos',
     },
   ];
 

@@ -4,38 +4,45 @@ import { RegistroComponent } from './core/auth/views/registro/registro.component
 import { LoginComponent } from './core/auth/views/login/login.component';
 import { inject } from '@angular/core';
 import { UsuarioService } from './core/auth/services/usuario.service';
-import { map, Observable } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
+import { contatosRoutes } from './views/contatos/contatos.routes';
 
 const authGuard: CanMatchFn = (): Observable<boolean | UrlTree> => {
   const router = inject(Router);
   const usuarioService = inject(UsuarioService);
 
   return usuarioService.usuarioAutenticado.pipe(
-    map(usuario => {
+    map((usuario) => {
       if (!usuario) return router.parseUrl('/login');
 
       return true;
     })
   );
-}
+};
 
 const authUserGuard: CanMatchFn = (): Observable<boolean | UrlTree> => {
   const router = inject(Router);
   const usuarioService = inject(UsuarioService);
 
   return usuarioService.usuarioAutenticado.pipe(
-    map(usuario => {
+    map((usuario) => {
       if (usuario) return router.parseUrl('/dashboard');
 
       return true;
     })
   );
-}
+};
 
 export const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-  { path: 'dashboard', component: DashboardComponent, canMatch: [authGuard]},
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    canMatch: [authGuard],
+  },
 
-  { path: 'registro', component: RegistroComponent, canMatch: [authUserGuard]},
-  { path: 'login', component: LoginComponent, canMatch: [authUserGuard]},
+  { path: 'registro', component: RegistroComponent, canMatch: [authUserGuard] },
+  { path: 'login', component: LoginComponent, canMatch: [authUserGuard] },
+
+  { path: 'contatos', children: contatosRoutes },
 ];
