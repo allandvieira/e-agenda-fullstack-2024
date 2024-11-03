@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -11,10 +11,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterLink } from '@angular/router';
-import { AutenticarUsuarioViewModel } from '../../models/auth.models';
+import {
+  AutenticarUsuarioViewModel,
+  TokenViewModel
+} from '../../models/auth.models';
 import { AuthService } from '../../services/auth.service';
 import { UsuarioService } from '../../services/usuario.service';
 import { LocalStorageService } from '../../services/local-storage.service';
+import { NotificacaoService } from '../../../notificacao/notificacao.service';
 
 @Component({
   selector: 'app-login',
@@ -32,12 +36,14 @@ import { LocalStorageService } from '../../services/local-storage.service';
 })
 export class LoginComponent {
   form: FormGroup;
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService,
     private usuarioService: UsuarioService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private notificacaoService: NotificacaoService
   ) {
     this.form = this.fb.group({
       login: [
@@ -74,11 +80,22 @@ export class LoginComponent {
 
     const loginUsuario: AutenticarUsuarioViewModel = this.form.value;
 
-    this.authService.login(loginUsuario).subscribe(res => {
-      this.usuarioService.logarUsuario(res.usuario);
-      this.localStorageService.salvarTokenAutenticacao(res);
+    const observer = {
+      next: (res: TokenViewModel) => this.processarSucesso(res),
+      error: (erro: Error) => this.processarFalha(erro)
+    };
 
-      this.router.navigate(['/dashboard'])
-    });
+    this.authService.login(loginUsuario).subscribe(observer);
+  }
+
+  private processarSucesso(res: TokenViewModel) {
+    this.usuarioService.logarUsuario(res.usuario);
+    this.localStorageService.salvarTokenAutenticacao(res);
+
+    this.router.navigate(['/dashboard']);
+  }
+
+  private processarFalha(err: Error) {
+    this.notificacaoService.erro(err.message);
   }
 }

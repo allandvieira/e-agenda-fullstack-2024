@@ -11,6 +11,7 @@ import { map, shareReplay } from 'rxjs/operators';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { LinkNavegacao } from './models/link-navegacao.model';
 import { UsuarioTokenViewModel } from '../auth/models/auth.models';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-shell',
@@ -25,6 +26,7 @@ import { UsuarioTokenViewModel } from '../auth/models/auth.models';
     MatButtonModule,
     MatSidenavModule,
     MatListModule,
+    MatMenuModule,
     MatIconModule,
   ],
 
