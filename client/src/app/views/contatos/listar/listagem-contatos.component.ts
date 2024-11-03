@@ -8,7 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-listagem-contatos',
@@ -16,7 +16,6 @@ import { RouterLink } from '@angular/router';
   imports: [
     NgIf,
     NgForOf,
-    AsyncPipe,
     RouterLink,
     MatCardModule,
     MatButtonModule,
@@ -27,13 +26,11 @@ import { RouterLink } from '@angular/router';
   templateUrl: './listagem-contatos.component.html',
 })
 export class ListagemContatosComponent implements OnInit {
-  contatos$: Observable<ListarContatoViewModel[]>;
+  contatos: ListarContatoViewModel[] = [];
 
-  constructor(private contatoService: ContatoService) {
-    this.contatos$ = of([]);
-  }
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.contatos$ = this.contatoService.selecionarTodos();
+    this.contatos = this.route.snapshot.data['contatos'];
   }
 }
