@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
-import { ShellComponent } from "./core/shell/shell.component";
+import { ShellComponent } from './core/shell/shell.component';
 import { Observable } from 'rxjs';
 import { UsuarioTokenViewModel } from './core/auth/models/auth.models';
 import { AsyncPipe } from '@angular/common';
@@ -36,7 +36,8 @@ export class AppComponent implements OnInit {
     const usuarioPersistido = token.usuario;
     const dataExpiracaoToken = new Date(token.dataExpiracao);
 
-    const tokenValido: boolean = this.authService.validarExpiracaoToken(dataExpiracaoToken);
+    const tokenValido: boolean =
+      this.authService.validarExpiracaoToken(dataExpiracaoToken);
 
     if (usuarioPersistido && tokenValido) {
       this.usuarioService.logarUsuario(usuarioPersistido);
