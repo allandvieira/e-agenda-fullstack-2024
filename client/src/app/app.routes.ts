@@ -44,5 +44,5 @@ export const routes: Routes = [
   { path: 'registro', component: RegistroComponent, canMatch: [authUserGuard] },
   { path: 'login', component: LoginComponent, canMatch: [authUserGuard] },
 
-  { path: 'contatos', children: contatosRoutes },
+  { path: 'contatos', children: contatosRoutes, canMatch: [authGuard] },
 ];

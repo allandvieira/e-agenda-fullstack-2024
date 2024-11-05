@@ -1,14 +1,23 @@
 import { NgIf } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { AuthService } from '../../services/auth.service';
-import { RegistrarUsuarioViewModel } from '../../models/auth.models';
+import {
+  RegistrarUsuarioViewModel,
+  TokenViewModel,
+} from '../../models/auth.models';
 import { Router, RouterLink } from '@angular/router';
 import { UsuarioService } from '../../services/usuario.service';
+import { NotificacaoService } from '../../../notificacao/notificacao.service';
 
 @Component({
   selector: 'app-registro',
@@ -31,7 +40,8 @@ export class RegistroComponent {
     private router: Router,
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private notificacaoService: NotificacaoService
   ) {
     this.form = this.formBuilder.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
@@ -48,9 +58,11 @@ export class RegistroComponent {
   get login() {
     return this.form.get('login');
   }
+
   get email() {
     return this.form.get('email');
   }
+
   get senha() {
     return this.form.get('senha');
   }
@@ -60,10 +72,19 @@ export class RegistroComponent {
 
     const registro: RegistrarUsuarioViewModel = this.form.value;
 
-    this.authService.registrar(registro).subscribe((res) => {
-      this.usuarioService.logarUsuario(res.usuario);
-
-      this.router.navigate(['/dashboard']);
+    this.authService.registrar(registro).subscribe({
+      next: (usuarioAutenticado) => this.processarSucesso(usuarioAutenticado),
+      error: (erro) => this.processarFalha(erro),
     });
+  }
+
+  private processarSucesso(token: TokenViewModel): void {
+    this.usuarioService.logarUsuario(token.usuario);
+
+    this.router.navigate(['/dashboard']);
+  }
+
+  private processarFalha(erro: Error): any {
+    this.notificacaoService.erro(erro.message);
   }
 }

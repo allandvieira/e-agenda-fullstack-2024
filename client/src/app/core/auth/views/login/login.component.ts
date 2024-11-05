@@ -84,12 +84,10 @@ export class LoginComponent {
 
     const loginUsuario: AutenticarUsuarioViewModel = this.form.value;
 
-    const observer = {
+    this.authService.login(loginUsuario).subscribe({
       next: (res: TokenViewModel) => this.processarSucesso(res),
       error: (erro: Error) => this.processarFalha(erro)
-    };
-
-    this.authService.login(loginUsuario).subscribe(observer);
+    });
   }
 
   private processarSucesso(res: TokenViewModel) {

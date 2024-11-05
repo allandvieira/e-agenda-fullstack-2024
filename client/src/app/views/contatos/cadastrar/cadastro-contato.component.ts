@@ -101,12 +101,10 @@ export class CadastroContatoComponent {
 
     const inserirContatoVm = this.form.value;
 
-    const observer: PartialObserver<ContatoInseridoViewModel> = {
+    this.contatoService.inserir(inserirContatoVm).subscribe({
       next: (contatoInserido) => this.processarSucesso(contatoInserido),
       error: (erro) => this.processarFalha(erro),
-    };
-
-    this.contatoService.inserir(inserirContatoVm).subscribe(observer);
+    });
   }
 
   private processarSucesso(contato: ContatoInseridoViewModel): void {
